@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Amogus</string>
+    <string name="generate_text">Generate random numbers</string>
+    <string name="enter_number_text">Enter a number</string>
+</resources>
