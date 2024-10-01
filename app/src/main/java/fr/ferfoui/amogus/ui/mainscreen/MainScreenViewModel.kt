@@ -13,8 +13,13 @@ class MainScreenViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(MainScreenUiState())
     val uiState: StateFlow<MainScreenUiState> = _uiState.asStateFlow()
 
+    fun generateNumbers(intervalMax: Int, count: Int) {
+        randomNumbers = generateRandomNumbers(intervalMax, count)
+        _uiState.value = MainScreenUiState(randomNumbers)
+    }
+
     private fun generateRandomNumbers(intervalMax: Int, count: Int): List<Int> {
-        return (0..count).map { generateRandomNumber(intervalMax) }
+        return (0 until count).map { generateRandomNumber(intervalMax) }
     }
 
 }
