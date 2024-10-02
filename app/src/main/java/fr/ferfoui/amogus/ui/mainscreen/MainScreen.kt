@@ -1,13 +1,23 @@
 package fr.ferfoui.amogus.ui.mainscreen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
@@ -30,12 +40,14 @@ fun MainScreen(
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainScreenContent(
             currentRandomNumbers = uiState.currentRandomNumbers,
             onUserGenerateNumbers = screenViewModel::generateNumbers,
             modifier = Modifier
+                .padding(vertical = 32.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(mediumPadding)
@@ -55,7 +67,7 @@ fun MainScreenContent(
         verticalArrangement = Arrangement.Center
     ) {
         var intervalMax by remember { mutableIntStateOf(16) }
-        var generatedCount by remember { mutableIntStateOf(0) }
+        var generatedCount by remember { mutableIntStateOf(5) }
 
         TextField(
             value = if (intervalMax != 0) intervalMax.toString() else "",
@@ -65,8 +77,16 @@ fun MainScreenContent(
             label = { Text(stringResource(R.string.enter_number_text)) }
         )
 
+        TextField(
+            value = if (generatedCount != 0) generatedCount.toString() else "",
+            onValueChange = {
+                generatedCount = it.toIntOrNull() ?: 0
+            },
+            label = { Text(stringResource(R.string.enter_count_text)) }
+        )
+
         Button(onClick = {
-            onUserGenerateNumbers(intervalMax, 5)
+            onUserGenerateNumbers(intervalMax, generatedCount)
         }) {
             Text(
                 text = stringResource(R.string.generate_text),
@@ -74,12 +94,37 @@ fun MainScreenContent(
             )
         }
 
-        currentRandomNumbers.forEach {
-            Text(
-                text = it.toString(),
-                fontSize = 24.sp,
-                modifier = Modifier.padding(16.dp)
-            )
+        NumberList(numbers = currentRandomNumbers)
+    }
+}
+
+@Composable
+fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
+    LazyColumn (
+        modifier = modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+            .size(500.dp)
+            .fillMaxWidth()
+    ) {
+        itemsIndexed(numbers) { index, number ->
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "${stringResource(R.string.number_text)} ${index + 1} :",
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                Text(
+                    text = number.toString(),
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
         }
     }
 }

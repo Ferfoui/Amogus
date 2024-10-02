@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Amogus</string>
     <string name="generate_text">Generate random numbers</string>
-    <string name="enter_number_text">Enter a number</string>
+    <string name="enter_number_text">Enter a number (It\'s the max number that can be reached)</string>
+    <string name="enter_count_text">How much numbers ?</string>
+    <string name="number_text">Nb</string>
 </resources>
