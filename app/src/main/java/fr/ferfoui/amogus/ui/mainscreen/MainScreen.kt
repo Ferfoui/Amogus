@@ -1,28 +1,28 @@
 package fr.ferfoui.amogus.ui.mainscreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,6 +70,7 @@ fun MainScreenContent(
         var generatedCount by remember { mutableIntStateOf(5) }
 
         TextField(
+            modifier = Modifier.padding(16.dp),
             value = if (intervalMax != 0) intervalMax.toString() else "",
             onValueChange = {
                 intervalMax = it.toIntOrNull() ?: 0
@@ -78,16 +79,21 @@ fun MainScreenContent(
         )
 
         TextField(
+            modifier = Modifier.padding(16.dp),
             value = if (generatedCount != 0) generatedCount.toString() else "",
             onValueChange = {
-                generatedCount = it.toIntOrNull() ?: 0
+                val value = it.toIntOrNull()
+                generatedCount = if (value != null && value > 0) {
+                    if (value > intervalMax) intervalMax else value
+                } else 0
             },
             label = { Text(stringResource(R.string.enter_count_text)) }
         )
 
-        Button(onClick = {
-            onUserGenerateNumbers(intervalMax, generatedCount)
-        }) {
+        Button(
+            modifier = Modifier.padding(16.dp),
+            onClick = { onUserGenerateNumbers(intervalMax, generatedCount) }
+        ) {
             Text(
                 text = stringResource(R.string.generate_text),
                 fontSize = 16.sp
@@ -98,6 +104,7 @@ fun MainScreenContent(
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
     LazyColumn (
@@ -113,8 +120,9 @@ fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "${stringResource(R.string.number_text)} ${index + 1} :",
+                    text = "${stringResource(R.string.number_text)} ${String.format("%02d", index + 1)} :",
                     fontSize = 24.sp,
+                    color = Color.Gray,
                     modifier = Modifier.padding(16.dp)
                 )
 
@@ -124,6 +132,8 @@ fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(16.dp)
                 )
             }
+
+            HorizontalDivider()
 
         }
     }

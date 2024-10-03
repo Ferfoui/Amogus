@@ -1,7 +1,7 @@
 package fr.ferfoui.amogus.ui.mainscreen
 
 import androidx.lifecycle.ViewModel
-import fr.ferfoui.amogus.data.random.generateRandomNumber
+import fr.ferfoui.amogus.data.random.generateDistinctRandomNumbers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +19,7 @@ class MainScreenViewModel : ViewModel() {
     }
 
     private fun generateRandomNumbers(intervalMax: Int, count: Int): List<Int> {
-        return (0 until count).map { generateRandomNumber(intervalMax) }
+        return generateDistinctRandomNumbers(intervalMax, count)
     }
 
 }
