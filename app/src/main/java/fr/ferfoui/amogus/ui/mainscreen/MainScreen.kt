@@ -74,6 +74,9 @@ fun MainScreenContent(
             value = if (intervalMax != 0) intervalMax.toString() else "",
             onValueChange = {
                 intervalMax = it.toIntOrNull() ?: 0
+                if (generatedCount > intervalMax) {
+                    generatedCount = intervalMax
+                }
             },
             label = { Text(stringResource(R.string.enter_number_text)) }
         )
