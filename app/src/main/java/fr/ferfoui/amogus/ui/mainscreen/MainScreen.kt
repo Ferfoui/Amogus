@@ -30,10 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.ferfoui.amogus.R
+import fr.ferfoui.amogus.data.random.RandomRepository
 
 @Composable
 fun MainScreen(
-    screenViewModel: MainScreenViewModel = viewModel()
+    screenViewModel: RandomViewModel = viewModel(
+        factory = RandomViewModelFactory(randomRepository = RandomRepository())
+    )
 ) {
     val uiState by screenViewModel.uiState.collectAsState()
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
@@ -58,8 +61,8 @@ fun MainScreen(
 @Composable
 fun MainScreenContent(
     currentRandomNumbers: List<Int>,
-    onUserGenerateNumbers: (Int, Int) -> Unit = { _, _ -> },
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onUserGenerateNumbers: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -95,7 +98,7 @@ fun MainScreenContent(
 
         Button(
             modifier = Modifier.padding(16.dp),
-            onClick = { onUserGenerateNumbers(intervalMax, generatedCount) }
+            onClick = { onUserGenerateNumbers() }
         ) {
             Text(
                 text = stringResource(R.string.generate_text),
