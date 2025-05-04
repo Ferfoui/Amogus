@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "fr.ferfoui.amogus"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "fr.ferfoui.amogus"
