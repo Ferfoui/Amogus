@@ -61,7 +61,7 @@ fun MainScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             MainScreenContent(
-                currentRandomNumbers = uiState.currentRandomNumbers,
+                uiState = uiState,
                 onUserGenerateNumbers = screenViewModel::generateNumbers,
                 modifier = Modifier
                     .padding(vertical = 32.dp)
@@ -74,9 +74,10 @@ fun MainScreen(
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun MainScreenContent(
-    currentRandomNumbers: List<Int>,
+    uiState: MainScreenUiState,
     modifier: Modifier = Modifier,
     onUserGenerateNumbers: () -> Unit = {},
     onOpenDashboard: () -> Unit = {}
@@ -97,29 +98,25 @@ fun MainScreenContent(
             )
         }
 
-        /*TextField(
+        Column(
             modifier = Modifier.padding(16.dp),
-            value = if (intervalMax != 0) intervalMax.toString() else "",
-            onValueChange = {
-                intervalMax = it.toIntOrNull() ?: 0
-                if (generatedCount > intervalMax) {
-                    generatedCount = intervalMax
-                }
-            },
-            label = { Text(stringResource(R.string.enter_number_text)) }
-        )
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "${stringResource(R.string.interval_max_text)} ${String.format("%02d", uiState.intervalMax.toInt())}",
+                fontSize = 24.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(8.dp)
+            )
 
-        TextField(
-            modifier = Modifier.padding(16.dp),
-            value = if (generatedCount != 0) generatedCount.toString() else "",
-            onValueChange = {
-                val value = it.toIntOrNull()
-                generatedCount = if (value != null && value > 0) {
-                    if (value > intervalMax) intervalMax else value
-                } else 0
-            },
-            label = { Text(stringResource(R.string.enter_count_text)) }
-        )*/
+            Text(
+                text = "${stringResource(R.string.count_text)} ${String.format("%02d", uiState.currentRandomNumbers.size)}",
+                fontSize = 24.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
 
         Button(
             modifier = Modifier.padding(16.dp),
@@ -131,7 +128,7 @@ fun MainScreenContent(
             )
         }
 
-        NumberList(numbers = currentRandomNumbers)
+        NumberList(numbers = uiState.currentRandomNumbers)
     }
 }
 
@@ -174,6 +171,10 @@ fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
 @Composable
 fun MainScreenContentPreview() {
     MainScreenContent(
-        currentRandomNumbers = listOf(1, 2, 3, 4, 5)
+        uiState = MainScreenUiState(
+                currentRandomNumbers = listOf(1, 2, 3, 4, 5),
+                intervalMax = 100u,
+                excludedNumbers = emptyList()
+            )
     )
 }

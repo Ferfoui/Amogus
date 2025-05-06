@@ -7,4 +7,6 @@
     <string name="open_dashboard_text">Open dashboard</string>
     <string name="enter_excluded_numbers_text">Enter excluded numbers (comma separated)</string>
     <string name="save_and_back_text">Save and back</string>
+    <string name="interval_max_text">Interval max:</string>
+    <string name="count_text">Count:</string>
 </resources>

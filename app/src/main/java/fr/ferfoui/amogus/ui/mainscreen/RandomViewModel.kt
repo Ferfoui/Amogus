@@ -33,7 +33,11 @@ class RandomViewModel(private val randomRepository: RandomRepository) : ViewMode
 
     fun generateNumbers() {
         randomNumbers = randomRepository.generateRandomNumbers()
-        _uiState.value = MainScreenUiState(randomNumbers)
+        _uiState.value = MainScreenUiState(
+            currentRandomNumbers = randomNumbers,
+            intervalMax = intervalMax,
+            excludedNumbers = excludedNumbers
+        )
     }
 
     fun saveNumbers() {

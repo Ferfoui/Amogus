@@ -29,23 +29,26 @@ fun DashboardScreen(
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(32.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
+            modifier = Modifier.padding(16.dp),
             value = intervalMax.toString(),
             onValueChange = { intervalMax = it.toIntOrNull() ?: 0 },
             label = { Text(stringResource(R.string.enter_number_text)) }
         )
 
         TextField(
+            modifier = Modifier.padding(16.dp),
             value = generatedCount.toString(),
             onValueChange = { generatedCount = it.toIntOrNull() ?: 0 },
             label = { Text(stringResource(R.string.enter_count_text)) }
         )
 
         TextField(
+            modifier = Modifier.padding(16.dp),
             value = excludedNumbers,
             onValueChange = { excludedNumbers = it },
             label = { Text(stringResource(R.string.enter_excluded_numbers_text)) }
