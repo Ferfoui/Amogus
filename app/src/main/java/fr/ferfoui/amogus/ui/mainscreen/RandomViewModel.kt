@@ -13,21 +13,31 @@ class RandomViewModel(private val randomRepository: RandomRepository) : ViewMode
     private val _uiState = MutableStateFlow(MainScreenUiState())
     val uiState: StateFlow<MainScreenUiState> = _uiState.asStateFlow()
 
-    fun setIntervalMax(intervalMax: UInt) {
-        randomRepository.intervalMax = intervalMax
-    }
+    var intervalMax: UInt
+        get() = randomRepository.intervalMax
+        set(value) {
+            randomRepository.intervalMax = value
+        }
 
-    fun setCount(count: UInt) {
-        randomRepository.count = count
-    }
+    var count: UInt
+        get() = randomRepository.count
+        set(value) {
+            randomRepository.count = value
+        }
 
-    fun setDuplicates(duplicates: UInt) {
-        randomRepository.duplicates = duplicates
-    }
+    var excludedNumbers: List<Int>
+        get() = randomRepository.excludedNumbers
+        set(value) {
+            randomRepository.excludedNumbers = value
+        }
 
     fun generateNumbers() {
         randomNumbers = randomRepository.generateRandomNumbers()
         _uiState.value = MainScreenUiState(randomNumbers)
+    }
+
+    fun saveNumbers() {
+        //randomRepository.saveRandomNumbers(randomNumbers)
     }
 
 }

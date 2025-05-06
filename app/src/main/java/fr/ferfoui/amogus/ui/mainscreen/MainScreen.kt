@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.ferfoui.amogus.R
 import fr.ferfoui.amogus.data.random.RandomRepository
+import fr.ferfoui.amogus.ui.dashboard.DashboardScreen
 
 @Composable
 fun MainScreen(
@@ -38,23 +39,38 @@ fun MainScreen(
         factory = RandomViewModelFactory(randomRepository = RandomRepository())
     )
 ) {
-    val uiState by screenViewModel.uiState.collectAsState()
-    val mediumPadding = dimensionResource(R.dimen.padding_medium)
+    var showDashboard by remember { mutableStateOf(false) }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        MainScreenContent(
-            currentRandomNumbers = uiState.currentRandomNumbers,
-            onUserGenerateNumbers = screenViewModel::generateNumbers,
-            modifier = Modifier
-                .padding(vertical = 32.dp)
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(mediumPadding)
+    if (showDashboard) {
+        DashboardScreen(
+            onBack = { showDashboard = false },
+            onUpdateIntervalMax = { screenViewModel.intervalMax = it.toUInt() },
+            onUpdateGeneratedCount = { screenViewModel.count = it.toUInt() },
+            onUpdateExcludedNumbers = { screenViewModel.excludedNumbers = it },
+            currentIntervalMax = screenViewModel.intervalMax.toInt(),
+            currentGeneratedCount = screenViewModel.count.toInt(),
+            currentExcludedNumbers = screenViewModel.excludedNumbers
         )
+    } else {
+        val uiState by screenViewModel.uiState.collectAsState()
+        val mediumPadding = dimensionResource(R.dimen.padding_medium)
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            MainScreenContent(
+                currentRandomNumbers = uiState.currentRandomNumbers,
+                onUserGenerateNumbers = screenViewModel::generateNumbers,
+                modifier = Modifier
+                    .padding(vertical = 32.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(mediumPadding),
+                onOpenDashboard = { showDashboard = true }
+            )
+        }
     }
 }
 
@@ -62,17 +78,26 @@ fun MainScreen(
 fun MainScreenContent(
     currentRandomNumbers: List<Int>,
     modifier: Modifier = Modifier,
-    onUserGenerateNumbers: () -> Unit = {}
+    onUserGenerateNumbers: () -> Unit = {},
+    onOpenDashboard: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var intervalMax by remember { mutableIntStateOf(16) }
-        var generatedCount by remember { mutableIntStateOf(5) }
 
-        TextField(
+        Button(
+            modifier = Modifier.padding(16.dp),
+            onClick = { onOpenDashboard() }
+        ) {
+            Text(
+                text = stringResource(R.string.open_dashboard_text),
+                fontSize = 16.sp
+            )
+        }
+
+        /*TextField(
             modifier = Modifier.padding(16.dp),
             value = if (intervalMax != 0) intervalMax.toString() else "",
             onValueChange = {
@@ -94,7 +119,7 @@ fun MainScreenContent(
                 } else 0
             },
             label = { Text(stringResource(R.string.enter_count_text)) }
-        )
+        )*/
 
         Button(
             modifier = Modifier.padding(16.dp),

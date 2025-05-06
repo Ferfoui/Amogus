@@ -5,6 +5,7 @@ class RandomRepository {
     private var _intervalMax: UInt = 0u
     private var _count: UInt = 0u
     private var _duplicates: UInt = 1u
+    private var _excludedNumbers: List<Int> = emptyList()
 
     var intervalMax: UInt
         get() = _intervalMax
@@ -16,22 +17,26 @@ class RandomRepository {
     var count: UInt
         get() = _count
         set(value) {
-            val allowedCount = _intervalMax * _duplicates
+            val allowedCount = (_intervalMax - _excludedNumbers.size.toUInt()) * _duplicates
             if (value > allowedCount) {
                 _count = allowedCount
             }
             _count = value
         }
 
-    var duplicates: UInt
-        get() = _duplicates
+    var excludedNumbers: List<Int>
+        get() = _excludedNumbers
         set(value) {
-            _duplicates = value
+            _excludedNumbers = value
             count = _count
         }
 
     fun generateRandomNumbers(): List<Int> {
-        return generateRandomNumbersWithDuplicates(_intervalMax, _count, _duplicates)
+        return generateRandomNumbersExcluding(
+            intervalMax = _intervalMax,
+            count = _count,
+            excludedNumbers = _excludedNumbers
+        )
     }
 
 }
