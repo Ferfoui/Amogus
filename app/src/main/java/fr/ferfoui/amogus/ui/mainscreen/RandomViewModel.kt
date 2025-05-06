@@ -40,8 +40,8 @@ class RandomViewModel(private val randomRepository: RandomRepository) : ViewMode
         )
     }
 
-    fun saveNumbers() {
-        //randomRepository.saveRandomNumbers(randomNumbers)
+    fun saveProperties() {
+        randomRepository.saveProperties()
     }
 
 }

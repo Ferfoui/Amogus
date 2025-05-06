@@ -43,7 +43,7 @@ fun MainScreen(
 
     if (showDashboard) {
         DashboardScreen(
-            onBack = { showDashboard = false },
+            onBack = { showDashboard = false; screenViewModel.saveProperties() },
             onUpdateIntervalMax = { screenViewModel.intervalMax = it.toUInt() },
             onUpdateGeneratedCount = { screenViewModel.count = it.toUInt() },
             onUpdateExcludedNumbers = { screenViewModel.excludedNumbers = it },

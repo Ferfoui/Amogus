@@ -39,4 +39,8 @@ class RandomRepository {
         )
     }
 
+    fun saveProperties() {
+        // Save properties to persistent storage
+    }
+
 }
