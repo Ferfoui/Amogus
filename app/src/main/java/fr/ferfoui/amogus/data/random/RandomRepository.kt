@@ -1,6 +1,11 @@
 package fr.ferfoui.amogus.data.random
 
-class RandomRepository {
+import fr.ferfoui.amogus.data.storage.DataStoreRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class RandomRepository(private val dataStoreRepository: DataStoreRepository) {
 
     private var _intervalMax: UInt = 0u
     private var _count: UInt = 0u
@@ -40,7 +45,25 @@ class RandomRepository {
     }
 
     fun saveProperties() {
-        // Save properties to persistent storage
+        dataStoreRepository.setGeneratorProperties(_intervalMax, _count, _excludedNumbers)
+    }
+
+    fun loadProperties() {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreRepository.getIntervalMax().collect { value ->
+                _intervalMax = value?.toUInt() ?: 0u
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreRepository.getCount().collect { value ->
+                _count = value?.toUInt() ?: 0u
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreRepository.getExcludedNumbers {
+                _excludedNumbers = it
+            }
+        }
     }
 
 }

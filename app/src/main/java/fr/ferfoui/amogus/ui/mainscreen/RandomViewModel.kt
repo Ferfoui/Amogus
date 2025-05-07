@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class RandomViewModel(private val randomRepository: RandomRepository) : ViewModel() {
 
+    init {
+        randomRepository.loadProperties()
+    }
+
     private lateinit var randomNumbers: List<Int>
 
     private val _uiState = MutableStateFlow(MainScreenUiState())
