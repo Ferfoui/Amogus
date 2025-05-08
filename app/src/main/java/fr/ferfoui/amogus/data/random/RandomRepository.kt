@@ -1,5 +1,7 @@
 package fr.ferfoui.amogus.data.random
 
+import fr.ferfoui.amogus.DEFAULT_COUNT
+import fr.ferfoui.amogus.DEFAULT_INTERVAL_MAX
 import fr.ferfoui.amogus.data.storage.DataStoreRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,18 +50,20 @@ class RandomRepository(private val dataStoreRepository: DataStoreRepository) {
         dataStoreRepository.setGeneratorProperties(_intervalMax, _count, _excludedNumbers)
     }
 
-    fun loadProperties() {
-        CoroutineScope(Dispatchers.IO).launch {
+    fun loadProperties(scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO) {
             dataStoreRepository.getIntervalMax().collect { value ->
-                _intervalMax = value?.toUInt() ?: 0u
+                _intervalMax = value?.toUInt() ?: DEFAULT_INTERVAL_MAX
             }
         }
-        CoroutineScope(Dispatchers.IO).launch {
+
+        scope.launch(Dispatchers.IO) {
             dataStoreRepository.getCount().collect { value ->
-                _count = value?.toUInt() ?: 0u
+                _count = value?.toUInt() ?: DEFAULT_COUNT
             }
         }
-        CoroutineScope(Dispatchers.IO).launch {
+
+        scope.launch(Dispatchers.IO) {
             dataStoreRepository.getExcludedNumbers {
                 _excludedNumbers = it
             }
