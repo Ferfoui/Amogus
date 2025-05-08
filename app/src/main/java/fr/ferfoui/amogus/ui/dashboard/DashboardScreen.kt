@@ -19,14 +19,14 @@ fun DashboardScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     onUpdateIntervalMax: (Int) -> Unit = {},
-    onUpdateGeneratedCount: (Int) -> Unit = {},
+    onUpdateGeneratingCount: (Int) -> Unit = {},
     onUpdateExcludedNumbers: (List<Int>) -> Unit = {},
     currentIntervalMax: Int = 0,
-    currentGeneratedCount: Int = 0,
+    currentGeneratingCount: Int = 0,
     currentExcludedNumbers: List<Int> = emptyList()
 ) {
     var intervalMax by remember { mutableIntStateOf(currentIntervalMax) }
-    var generatedCount by remember { mutableIntStateOf(currentGeneratedCount) }
+    var generatingCount by remember { mutableIntStateOf(currentGeneratingCount) }
     var excludedNumbers by remember { mutableStateOf(currentExcludedNumbers.joinToString()) }
 
     Column(
@@ -38,15 +38,15 @@ fun DashboardScreen(
     ) {
         TextField(
             modifier = Modifier.padding(16.dp),
-            value = intervalMax.toString(),
+            value = if (intervalMax != 0) intervalMax.toString() else "",
             onValueChange = { intervalMax = it.toIntOrNull() ?: 0 },
             label = { Text(stringResource(R.string.enter_number_text)) }
         )
 
         TextField(
             modifier = Modifier.padding(16.dp),
-            value = generatedCount.toString(),
-            onValueChange = { generatedCount = it.toIntOrNull() ?: 0 },
+            value = if (generatingCount != 0) generatingCount.toString() else "",
+            onValueChange = { generatingCount = it.toIntOrNull() ?: 0 },
             label = { Text(stringResource(R.string.enter_count_text)) }
         )
 
@@ -61,7 +61,7 @@ fun DashboardScreen(
             modifier = Modifier.padding(16.dp),
             onClick = {
                 onUpdateIntervalMax(intervalMax)
-                onUpdateGeneratedCount(generatedCount)
+                onUpdateGeneratingCount(generatingCount)
                 onUpdateExcludedNumbers(excludedNumbers.split(",").mapNotNull { it.toIntOrNull() })
                 onBack()
             }

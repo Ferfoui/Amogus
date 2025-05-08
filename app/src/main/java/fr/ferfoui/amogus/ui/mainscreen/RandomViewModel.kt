@@ -11,7 +11,12 @@ import kotlinx.coroutines.launch
 class RandomViewModel(private val randomRepository: RandomRepository) : ViewModel() {
 
     init {
-        randomRepository.loadProperties(viewModelScope)
+        randomRepository.loadProperties(viewModelScope) {
+            _uiState.value = _uiState.value.copy(
+                generatingCount = count,
+                intervalMax = intervalMax
+            )
+        }
     }
 
     private lateinit var randomNumbers: List<Int>
@@ -40,16 +45,16 @@ class RandomViewModel(private val randomRepository: RandomRepository) : ViewMode
     fun generateNumbers() {
         viewModelScope.launch {
             randomNumbers = randomRepository.generateRandomNumbers()
-            _uiState.value = MainScreenUiState(
-                currentRandomNumbers = randomNumbers,
-                intervalMax = intervalMax,
-                excludedNumbers = excludedNumbers
-            )
+            _uiState.value = _uiState.value.copy(currentRandomNumbers = randomNumbers)
         }
     }
 
     fun saveProperties() {
         randomRepository.saveProperties()
+        _uiState.value = _uiState.value.copy(
+            generatingCount = count,
+            intervalMax = intervalMax
+        )
     }
 
 }

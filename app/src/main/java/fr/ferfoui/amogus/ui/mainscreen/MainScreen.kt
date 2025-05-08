@@ -47,10 +47,10 @@ fun MainScreen(
                 modifier = Modifier.fillMaxHeight(),
                 onBack = { showDashboard = false; screenViewModel.saveProperties() },
                 onUpdateIntervalMax = { screenViewModel.intervalMax = it.toUInt() },
-                onUpdateGeneratedCount = { screenViewModel.count = it.toUInt() },
+                onUpdateGeneratingCount = { screenViewModel.count = it.toUInt() },
                 onUpdateExcludedNumbers = { screenViewModel.excludedNumbers = it },
                 currentIntervalMax = screenViewModel.intervalMax.toInt(),
-                currentGeneratedCount = screenViewModel.count.toInt(),
+                currentGeneratingCount = screenViewModel.count.toInt(),
                 currentExcludedNumbers = screenViewModel.excludedNumbers
             )
         } else {
@@ -116,7 +116,7 @@ fun MainScreenContent(
                 text = "${stringResource(R.string.count_text)} ${
                     String.format(
                         "%02d",
-                        uiState.currentRandomNumbers.size
+                        uiState.generatingCount.toInt()
                     )
                 }",
                 fontSize = 24.sp,
@@ -185,8 +185,8 @@ fun MainScreenContentPreview() {
     MainScreenContent(
         uiState = MainScreenUiState(
             currentRandomNumbers = listOf(1, 2, 3, 4, 5),
-            intervalMax = 100u,
-            excludedNumbers = emptyList()
+            generatingCount = 5u,
+            intervalMax = 12u
         )
     )
 }
