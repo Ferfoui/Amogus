@@ -1,5 +1,6 @@
 package fr.ferfoui.amogus.ui.dashboard
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,11 +17,12 @@ import fr.ferfoui.amogus.R
 @Composable
 fun DashboardScreen(
     onBack: () -> Unit,
-    onUpdateIntervalMax: (Int) -> Unit,
-    onUpdateGeneratedCount: (Int) -> Unit,
-    onUpdateExcludedNumbers: (List<Int>) -> Unit,
-    currentIntervalMax: Int,
-    currentGeneratedCount: Int,
+    modifier: Modifier = Modifier,
+    onUpdateIntervalMax: (Int) -> Unit = {},
+    onUpdateGeneratedCount: (Int) -> Unit = {},
+    onUpdateExcludedNumbers: (List<Int>) -> Unit = {},
+    currentIntervalMax: Int = 0,
+    currentGeneratedCount: Int = 0,
     currentExcludedNumbers: List<Int> = emptyList()
 ) {
     var intervalMax by remember { mutableIntStateOf(currentIntervalMax) }
@@ -28,10 +30,11 @@ fun DashboardScreen(
     var excludedNumbers by remember { mutableStateOf(currentExcludedNumbers.joinToString()) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(32.dp)
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         TextField(
             modifier = Modifier.padding(16.dp),

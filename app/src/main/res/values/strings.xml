@@ -2,7 +2,7 @@
     <string name="app_name">Amogus</string>
     <string name="generate_text">Generate random numbers</string>
     <string name="enter_number_text">Enter a number (It\'s the max number that can be reached)</string>
-    <string name="enter_count_text">How much numbers ?</string>
+    <string name="enter_count_text">How many numbers ?</string>
     <string name="number_text">Nb</string>
     <string name="open_dashboard_text">Open dashboard</string>
     <string name="enter_excluded_numbers_text">Enter excluded numbers (comma separated)</string>

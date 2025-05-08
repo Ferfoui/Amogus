@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,25 +37,26 @@ fun MainScreen(
 ) {
     var showDashboard by remember { mutableStateOf(false) }
 
-    if (showDashboard) {
-        DashboardScreen(
-            onBack = { showDashboard = false; screenViewModel.saveProperties() },
-            onUpdateIntervalMax = { screenViewModel.intervalMax = it.toUInt() },
-            onUpdateGeneratedCount = { screenViewModel.count = it.toUInt() },
-            onUpdateExcludedNumbers = { screenViewModel.excludedNumbers = it },
-            currentIntervalMax = screenViewModel.intervalMax.toInt(),
-            currentGeneratedCount = screenViewModel.count.toInt(),
-            currentExcludedNumbers = screenViewModel.excludedNumbers
-        )
-    } else {
-        val uiState by screenViewModel.uiState.collectAsState()
-        val mediumPadding = dimensionResource(R.dimen.padding_medium)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        if (showDashboard) {
+            DashboardScreen(
+                modifier = Modifier.fillMaxHeight(),
+                onBack = { showDashboard = false; screenViewModel.saveProperties() },
+                onUpdateIntervalMax = { screenViewModel.intervalMax = it.toUInt() },
+                onUpdateGeneratedCount = { screenViewModel.count = it.toUInt() },
+                onUpdateExcludedNumbers = { screenViewModel.excludedNumbers = it },
+                currentIntervalMax = screenViewModel.intervalMax.toInt(),
+                currentGeneratedCount = screenViewModel.count.toInt(),
+                currentExcludedNumbers = screenViewModel.excludedNumbers
+            )
+        } else {
+            val uiState by screenViewModel.uiState.collectAsState()
+            val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-        ) {
             MainScreenContent(
                 uiState = uiState,
                 onUserGenerateNumbers = screenViewModel::generateNumbers,
@@ -99,14 +101,24 @@ fun MainScreenContent(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "${stringResource(R.string.interval_max_text)} ${String.format("%02d", uiState.intervalMax.toInt())}",
+                text = "${stringResource(R.string.interval_max_text)} ${
+                    String.format(
+                        "%02d",
+                        uiState.intervalMax.toInt()
+                    )
+                }",
                 fontSize = 24.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(8.dp)
             )
 
             Text(
-                text = "${stringResource(R.string.count_text)} ${String.format("%02d", uiState.currentRandomNumbers.size)}",
+                text = "${stringResource(R.string.count_text)} ${
+                    String.format(
+                        "%02d",
+                        uiState.currentRandomNumbers.size
+                    )
+                }",
                 fontSize = 24.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(8.dp)
@@ -130,7 +142,7 @@ fun MainScreenContent(
 @SuppressLint("DefaultLocale")
 @Composable
 fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
-    LazyColumn (
+    LazyColumn(
         modifier = modifier
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
@@ -138,12 +150,17 @@ fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
             .fillMaxWidth()
     ) {
         itemsIndexed(numbers) { index, number ->
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "${stringResource(R.string.number_text)} ${String.format("%02d", index + 1)} :",
+                    text = "${stringResource(R.string.number_text)} ${
+                        String.format(
+                            "%02d",
+                            index + 1
+                        )
+                    } :",
                     fontSize = 24.sp,
                     color = Color.Gray,
                     modifier = Modifier.padding(16.dp)
@@ -167,9 +184,9 @@ fun NumberList(numbers: List<Int>, modifier: Modifier = Modifier) {
 fun MainScreenContentPreview() {
     MainScreenContent(
         uiState = MainScreenUiState(
-                currentRandomNumbers = listOf(1, 2, 3, 4, 5),
-                intervalMax = 100u,
-                excludedNumbers = emptyList()
-            )
+            currentRandomNumbers = listOf(1, 2, 3, 4, 5),
+            intervalMax = 100u,
+            excludedNumbers = emptyList()
+        )
     )
 }
